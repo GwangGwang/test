@@ -12,3 +12,16 @@ jobs:
     resource_class: arm-medium
     steps:
       - run: echo "im a machine provisioned job"
+      - store_results
+      - run: sleep 3600
+
+commands:
+  store_results:
+    steps:
+      - run:
+          name: store stuff
+          when: always
+          command: |
+            echo "i'm an artifact" > result
+      - store_artifacts:
+          path: result
