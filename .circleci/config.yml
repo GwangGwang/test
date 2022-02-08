@@ -9,7 +9,6 @@ jobs:
   test:
     machine:
       image: ubuntu-2004:202011-01
-    resource_class: arm-medium
     steps:
       - run: echo "im a machine provisioned job"
       - store_results
