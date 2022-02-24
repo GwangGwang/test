@@ -9,11 +9,11 @@ jobs:
   test:
     machine:
       image: ubuntu-2004:202107-02
-    resource_class: large
+    resource_class: medio
     steps:
       - run: echo "im a machine provisioned job"
       - store_results
-      - run: sleep 3600
+      - run: sleep 100
 
 commands:
   store_results:
