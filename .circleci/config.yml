@@ -8,7 +8,6 @@ workflows:
 jobs:
   test:
     machine: true
-    resource_class: medium
     steps:
       - run: echo "hello"
       - store_results
