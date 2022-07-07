@@ -5,4 +5,4 @@ jobs:
       - image: account-id.dkr.ecr.us-east-1.amazonaws.com/org/repo:0.1
         aws_auth:
           aws_access_key_id: AKIAQWERVA  # can specify string literal values
-          aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY  # or project UI envar reference
+          aws_secret_access_key: ECR_AWS_SECRET_ACCESS_KEY  # or project UI envar reference
