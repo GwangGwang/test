@@ -1,25 +1,8 @@
-version: 2.1
-# Orchestrate or schedule a set of jobs
-workflows:
-  main:
-    jobs:
-      - test
-
+version: 2
 jobs:
-  test:
-    machine: true
-    steps:
-      - run: echo "hello"
-      - store_results
-      - run: sleep 100
-
-commands:
-  store_results:
-    steps:
-      - run:
-          name: store stuff
-          when: always
-          command: |
-            echo "i'm an artifact" > result
-      - store_artifacts:
-          path: result
+  build:
+    docker:
+      - image: account-id.dkr.ecr.us-east-1.amazonaws.com/org/repo:0.1
+        aws_auth:
+          aws_access_key_id: AKIAQWERVA  # can specify string literal values
+          aws_secret_access_key: $ECR_AWS_SECRET_ACCESS_KEY  # or project UI envar reference
