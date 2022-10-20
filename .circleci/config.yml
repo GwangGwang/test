@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     machine:
-      - image: ubuntu-1104:11
+      - image: ubunt-1104:11
     steps:
       - checkout
       - run: echo "hello"
