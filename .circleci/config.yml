@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/base:2022.06
+      - image: cimg/base:1922.06
     steps:
       - checkout
       - run: echo "hello"
