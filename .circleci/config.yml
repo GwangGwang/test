@@ -1,8 +1,8 @@
 version: 2
 jobs:
   build:
-    docker:
-      - image: cimg/base:1922.06
+    machine:
+      - image: ubuntu-1104:2022.04.2
     steps:
       - checkout
       - run: echo "hello"
