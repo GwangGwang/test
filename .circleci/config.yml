@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     machine:
-      - image: ubunt-1104:11
+      - image: banana
     steps:
       - checkout
       - run: echo "hello"
