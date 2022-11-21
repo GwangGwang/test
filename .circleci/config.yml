@@ -2,8 +2,8 @@ version: 2.1
 jobs:
   build:
     machine:
-      - image: banana
+      - image: default
     steps:
       - checkout
-      - run: echo "hello"
+      - run: ps -efww
   
