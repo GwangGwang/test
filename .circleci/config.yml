@@ -1,9 +1,9 @@
-version: 2.1
+version: 2
 jobs:
   build:
     machine:
       - image: ubuntu-1104:2022.04.2
     steps:
       - checkout
+      - run: echo "hello"
       - run: ps -efww
-  
