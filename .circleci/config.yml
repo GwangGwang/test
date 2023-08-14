@@ -1,9 +1,12 @@
-version: 2
+version: 2.1
+orbs:
+  go: circleci/go@1.7.3
 jobs:
   build:
     docker:
-      - image: cimg/base:1922.06
+      - image: google/cloud-sdk:411.0.0-alpine
     steps:
       - checkout
-      - run: echo "hello"
-  
+      - go/install:
+          version: 1.21.0
+            
