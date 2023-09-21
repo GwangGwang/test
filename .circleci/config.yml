@@ -6,7 +6,6 @@ jobs:
     steps:
       - checkout
       - run:
-	  name: build templates
-	  command: make build-templates
-	  working_directory: ./test/ci
-  
+          name: build templates
+          command: make build-templates
+          working_directory: ./test/ci
