@@ -1,8 +1,9 @@
 #!/bin/sh
 
-echo "previous sha1: $CIRCLE_PREVIOUS_SHA1"
-echo "current sha1: $CIRCLE_SHA1"
-
-CHANGED_FILES=$(git diff --name-only $CIRCLE_PREVIOUS_SHA1..$CIRCLE_SHA1)
+CHANGED_FILES=$(git show --pretty="format:" --name-only $CIRCLE_SHA1)
 echo "Changed files:"
 echo "$CHANGED_FILES"
+
+CHANGED_SERVICE=$(echo "CHANGED_FILES" | grep '^cmd/' | sed 's/\/.*//g' | sort -u)
+echo "Changed services:"
+echo "$CHANGED_SERVICE"
