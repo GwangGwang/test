@@ -2,11 +2,10 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/base:1922.06
+      - image: circleci/golang:1.16
     steps:
       - checkout
       - run:
-	  name: build templates
-	  command: make build-templates
-	  working_directory: ./test/ci
-  
+          name: build templates
+          command: make build-templates
+          working_directory: ./test/ci
