@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: cimg/base:1922.06
+      - image: circleci/golang:1.16
     steps:
       - checkout
       - run:
