@@ -25,6 +25,8 @@ workflows:
           context:
             - shared
       - test:
+          requires:
+            - build
           context:
             - shared
         
