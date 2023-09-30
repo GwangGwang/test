@@ -11,6 +11,6 @@ CHANGED_SERVICE=$(echo "$CHANGED_FILES" | grep '^cmd/' | cut -f2 -d'/' | sort -u
 echo "Changed services:"
 echo "$CHANGED_SERVICE"
 
-echo "$CHANGED_SERVICE" >> "/tmp/test"
-
-
+mkdir /tmp/ci
+chmod 755 /tmp/ci
+echo "$CHANGED_SERVICE" >> "/tmp/ci/test"

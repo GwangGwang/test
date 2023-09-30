@@ -9,13 +9,19 @@ jobs:
           name: build templates
           command: make build-templates
           working_directory: ./test/ci
+      - persist_to_workspace:
+          root: /tmp/ci
+          paths:
+            - test    
   test:
     docker:
       - image: circleci/golang:1.16
     steps:
+      - attach_workspace:
+          at: /tmp/ci
       - run:
           name: file exists
-          command: cat /tmp/test
+          command: cat /tmp/ci/test
         
   
 workflows:
