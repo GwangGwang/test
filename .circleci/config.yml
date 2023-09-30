@@ -18,3 +18,13 @@ jobs:
           command: cat /tmp/test
         
   
+workflows:
+  test:
+    jobs:
+      - build:
+          context:
+            - shared
+      - test:
+          context:
+            - shared
+        
