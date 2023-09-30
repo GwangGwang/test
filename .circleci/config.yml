@@ -22,7 +22,7 @@ jobs:
       - run:
           name: file exists
           command: cat /tmp/ci/test
-        
+                
   
 workflows:
   test:
@@ -30,9 +30,12 @@ workflows:
       - build:
           context:
             - shared
+      - hold-test:
+          type: approval
+          requires:
+            - build      
       - test:
           requires:
-            - build
+            - hold
           context:
             - shared
-        
