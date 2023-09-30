@@ -1,9 +1,9 @@
 #!/bin/sh
 
 #CHANGED_FILES=$(git show --pretty="format:" --name-only $CIRCLE_SHA1)
-CHANGED_FILES="fii
-bar
-raz"
+CHANGED_FILES="cmd/fii
+cmd/bar
+cmd/raz/meh"
 echo "Changed files:"
 echo "$CHANGED_FILES"
 
