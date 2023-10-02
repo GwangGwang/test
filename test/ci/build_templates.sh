@@ -17,6 +17,6 @@ done
 file_array=$(echo "$file_array" | sed -e 's/^[[:space:]]*//')
 
 # Loop through the array and print each file
-for file in $file_array; do
+for file in "${file_array[@]}"; do
   echo "changed file: $file"
 done
