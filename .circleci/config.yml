@@ -3,7 +3,10 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.16
-    steps:
+    steps:      
+      - setup_remote_docker:
+          version: 20.10.2
+          docker_layer_caching: true
       - checkout
       - run:
           name: build templates
@@ -14,7 +17,7 @@ jobs:
           command: echo $PATH
       - run:
           name: update path
-          command: echo 'export PATH=$(pwd):$PATH' >> "$BASH_ENV"
+          command: echo 'export PATH=$(pwd)/bin:$PATH' >> "$BASH_ENV"
       - run:
           name: echo path
           command: echo $PATH
