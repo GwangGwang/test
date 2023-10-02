@@ -16,11 +16,11 @@ jobs:
       - run: docker build --help
 
       - run: |
-        ssh remote-docker \<<EOF
-          sudo bash -c 'echo "{\"experimental\": true}" > /etc/docker/daemon.json'
-          sudo systemctl restart docker
-          sudo docker info
-        EOF
+          ssh remote-docker \<<EOF
+            sudo bash -c 'echo "{\"experimental\": true}" > /etc/docker/daemon.json'
+            sudo systemctl restart docker
+            sudo docker info
+          EOF
       - run: |
           export DOCKER_CLI_EXPERIMENTAL=enabled
           docker buildx version
