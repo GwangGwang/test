@@ -18,9 +18,7 @@ jobs:
       
       - run:
           name: docker build
-          command: docker buildx build \
-            Dockerfile \ 
-            --platform linux/amd64
+          command: make build-events-image-dev
           
   test:
     docker:
