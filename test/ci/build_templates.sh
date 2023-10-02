@@ -7,17 +7,7 @@ cmd/raz/meh"
 echo "Changed files:"
 echo "$changed_files"
 
-CHANGED_SERVICE=$(echo "$changed_files" | grep '^cmd/' | cut -f2 -d'/' | sort -u)
-echo "Changed services:"
-echo "$CHANGED_SERVICE"
+while read -r line; do
+     echo "changed file: $line"
+done < changed_files
 
-# Convert the list into an array
-file_array=()
-while IFS= read -r file; do
-  file_array+=("$file")
-done <<< "$changed_files"
-
-# Loop through the array and print each file
-for file in "${file_array[@]}"; do
-  echo "changed file: $file"
-done
