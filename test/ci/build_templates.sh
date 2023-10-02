@@ -9,5 +9,5 @@ echo "$changed_files"
 
 while read -r line; do
      echo "changed file: $line"
-done <<< changed_files
+done <<< "$changed_files"
 
