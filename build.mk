@@ -34,7 +34,7 @@ endef
 define build-image
 	mkdir -p $1/out/
 	rm -rf $1/out/image.tar.gz
-	docker build \
+	docker buildx build \
 		-f $1/Dockerfile \
 		--platform $(DOCKER_PLATFORM) \
 		--build-arg GOPROXY \
