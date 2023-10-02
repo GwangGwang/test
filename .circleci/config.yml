@@ -18,7 +18,9 @@ jobs:
       
       - run:
           name: docker build
-          command: docker buildx build Dockerfile --platform linux/amd64
+          command: docker buildx build \
+            Dockerfile \ 
+            --platform linux/amd64
           
   test:
     docker:
