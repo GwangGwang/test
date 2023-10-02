@@ -15,4 +15,4 @@ define build-image
 endef
 
 build-events-image-dev:
-	$(call build-image,.,app.dev.json,events)
+	$(call build-image,cmd,app.dev.json,events)
