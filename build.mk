@@ -2,7 +2,7 @@
 define build-image
 	mkdir -p $1/out/
 	rm -rf $1/out/image.tar.gz
-	docker buildx build \
+	docker build \
 		-f $1/Dockerfile \
 		--platform $(DOCKER_PLATFORM) \
 		--build-arg GOPROXY \
