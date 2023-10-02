@@ -16,7 +16,7 @@ IFS=$'\n'
 CHANGED_SERVICES=$CHANGED_SERVICES
 IFS=$TEMPIFS
 
-for i in ${CHANGED_SERVICES[@]}
+for i in "${CHANGED_SERVICES[@]}"
 do
   echo "building for $service"
 done
