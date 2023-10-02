@@ -8,8 +8,7 @@ echo "Changed files:"
 echo "$changed_files"
 
 for file in $changed_files; do
-  file_array="$file_array$file
-"
+  file_array="$file_array$file\n"
 done
 
 # Remove trailing newline
