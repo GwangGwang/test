@@ -16,6 +16,12 @@ jobs:
       - run: docker build --help
       - run: docker buildx build --help
       
+      - run: |
+      export DOCKER_BUILDKIT=1
+docker build --platform=local -o . git://github.com/docker/buildx
+mkdir -p ~/.docker/cli-plugins
+mv buildx ~/.docker/cli-plugins/docker-buildx
+
       - run:
           name: docker build
           command: make build-events-image-dev
