@@ -45,3 +45,7 @@ define build-image
 		-t $3 .
 	docker save $3 | gzip > $1/out/image.tar.gz
 endef
+
+
+build-events-image-dev:
+	$(call build-image,cmd,app.dev.json,events)
