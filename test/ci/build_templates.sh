@@ -16,9 +16,8 @@ IFS=$'\n'
 CHANGED_SERVICES=$CHANGED_SERVICES
 IFS=$TEMPIFS
 
-for (( i=0; i<${#CHANGED_SERVICES[@]}; i++ )) do
-  service=${CHANGED_SERVICES[$i]}
-  echo "$i building for $service"
+for i in ${CHANGED_SERVICES[@]} do
+  echo "building for $service"
 done
 
 mkdir /tmp/ci
