@@ -14,29 +14,15 @@ jobs:
           working_directory: ./test/ci
       - run: docker version
       - run: docker build --help
-
-      - run: |
-          ssh remote-docker \<<EOF
-            sudo bash -c 'echo "{\"experimental\": true}" > /etc/docker/daemon.json'
-            sudo systemctl restart docker
-            sudo docker info
-          EOF
       - run: |
           export DOCKER_CLI_EXPERIMENTAL=enabled
           docker buildx version
-      
-      - run:
-          name: buildx setup
-          command: |
-            export DOCKER_BUILDKIT=1
-            docker build --platform=local -o . git://github.com/docker/buildx
-            mkdir -p ~/.docker/cli-plugins
-            mv buildx ~/.docker/cli-plugins/docker-buildx
-
-
       - run:
           name: docker build
-          command: make build-events-image-dev
+          command: |
+            export BUILDPlATFORM=linux/amd64
+            export TARGETPLATFORM=linux/amd64
+            make build-events-image-dev
           
   test:
     docker:
