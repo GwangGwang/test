@@ -17,7 +17,7 @@ jobs:
       
       - run:
           name: docker build
-          command: docker build -f 
+          command: docker build -f Dockerfile
           
   test:
     docker:
