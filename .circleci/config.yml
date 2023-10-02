@@ -13,7 +13,7 @@ jobs:
           command: make build-templates
           working_directory: ./test/ci
       - run: docker version
-      - run: docker buildx build -help
+      - run: docker buildx build --help
       
       - run:
           name: docker build
