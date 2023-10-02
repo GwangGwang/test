@@ -12,12 +12,13 @@ jobs:
           name: build templates
           command: make build-templates
           working_directory: ./test/ci
+      - run: docker version
+      - run: docker buildx build -help
+      
       - run:
           name: docker build
           command: docker build -f 
           
-      - run: docker version
-      - run: docker buildx build -help
   test:
     docker:
       - image: circleci/golang:1.16
