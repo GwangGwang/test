@@ -11,6 +11,16 @@ CHANGED_SERVICE=$(echo "$CHANGED_FILES" | grep '^cmd/' | cut -f2 -d'/' | sort -u
 echo "Changed services:"
 echo "$CHANGED_SERVICE"
 
+TEMPIFS=$IFS
+IFS=$'\n'
+CHANGED_SERVICES=$CHANGED_SERVICES
+IFS=$TEMPIFS
+
+for (( i=0; i<${#CHANGED_SERVICES[@]}; i++ )) do
+  service=${CHANGED_SERVICES[$i]}
+  echo "$i building for $service"
+done
+
 mkdir /tmp/ci
 chmod 755 /tmp/ci
 echo "$CHANGED_SERVICE" >> "/tmp/ci/test"
