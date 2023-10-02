@@ -14,7 +14,9 @@ jobs:
           working_directory: ./test/ci
       - run: docker version
       - run: docker build --help
-      - run: docker buildx build --help
+      - run: |
+          export DOCKER_CLI_EXPERIMENTAL=enabled
+          docker buildx version
       
       - run:
           name: buildx setup
