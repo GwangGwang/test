@@ -19,7 +19,7 @@ jobs:
           command: |
             export BUILDPLATFORM=linux/amd64
             export TARGETPLATFORM=linux/amd64
-            make build-events-image-dev
+            BUILDPLATFORM=linux/amd64 TARGETPLATFORM=linux/amd64 make build-events-image-dev
           
   test:
     docker:
