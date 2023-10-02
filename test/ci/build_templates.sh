@@ -7,14 +7,14 @@ cmd/raz/meh"
 echo "Changed files:"
 echo "$changed_files"
 
-for file in $changed_files; do
-  file_array="$file_array$file\n"
-done
+#for file in $changed_files; do
+ # file_array="$file_array$file\n"
+#done
 
 # Remove trailing newline
-file_array=$(echo "$file_array" | sed -e '$ d')
+#file_array=$(echo "$file_array" | sed -e '$ d')
 
 # Loop through the array and print each file
-for file in $file_array; do
+for file in $changed_files; do
   echo "changed file: $file"
 done
