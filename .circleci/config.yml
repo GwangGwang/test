@@ -13,14 +13,8 @@ jobs:
           command: make build-templates
           working_directory: ./test/ci
       - run:
-          name: echo path
-          command: echo $PATH
-      - run:
-          name: update path
-          command: echo 'export PATH=$(pwd)/bin:$PATH' >> "$BASH_ENV"
-      - run:
-          name: echo path
-          command: echo $PATH
+          name: docker build
+          command: docker build -f 
   test:
     docker:
       - image: circleci/golang:1.16
