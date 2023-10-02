@@ -9,6 +9,15 @@ jobs:
           name: build templates
           command: make build-templates
           working_directory: ./test/ci
+      - run:
+          name: echo path
+          command: echo $PATH
+      - run:
+          name: update path
+          command: export PATH=$(pwd):$PATH
+      - run:
+          name: echo path
+          command: echo $PATH
       - persist_to_workspace:
           root: /tmp/ci
           paths:
@@ -22,6 +31,9 @@ jobs:
       - run:
           name: file exists
           command: cat /tmp/ci/test
+      - run:
+          name: echo path
+          command: echo $PATH
                 
   
 workflows:
