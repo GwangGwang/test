@@ -7,7 +7,16 @@ cmd/raz/meh"
 echo "Changed files:"
 echo "$changed_files"
 
-while read -r line; do
-     echo "changed file: $line"
-done <<< "$changed_files"
+IFS='
+'
+for file in $changed_files; do
+  file_array="$file_array $file"
+done
 
+# Remove leading whitespace
+file_array=$(echo "$file_array" | sed -e 's/^[[:space:]]*//')
+
+# Loop through the array and print each file
+for file in $file_array; do
+  echo "changed file: $file"
+done
