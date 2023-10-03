@@ -19,6 +19,6 @@ for file in $changed_files; do
   echo "changed file: $file"
 done
 
-BUILDPLATFORM=linux/amd64
-TARGETPLATFORM=linux/amd64
+export BUILDPLATFORM=linux/amd64
+export TARGETPLATFORM=linux/amd64
 make build-events-image-dev
