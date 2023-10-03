@@ -10,12 +10,6 @@ jobs:
       - checkout
       - run: docker version
       - run:
-          name: docker build
-          command: |
-            export BUILDPLATFORM=linux/amd64
-            export TARGETPLATFORM=linux/amd64
-            BUILDPLATFORM=linux/amd64 TARGETPLATFORM=linux/amd64 make build-events-image-dev
-      - run:
           name: build templates
           command: make build-templates
           working_directory: ./test/ci
