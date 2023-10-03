@@ -15,6 +15,13 @@ jobs:
       - run: docker version
       - run: docker build --help
       - run:
+          name: buildx
+          command: |
+            export DOCKER_BUILDKIT=1
+            docker build --platform=local -o . git://github.com/docker/buildx
+            mkdir -p ~/.docker/cli-plugins
+            mv buildx ~/.docker/cli-plugins/docker-buildx
+      - run:
           name: docker build
           command: |
             export BUILDPLATFORM=linux/amd64
