@@ -8,10 +8,6 @@ jobs:
           version: 20.10.24
           docker_layer_caching: true
       - checkout
-      - run:
-          name: build templates
-          command: make build-templates
-          working_directory: ./test/ci
       - run: docker version
       - run: docker build --help
       - run:
@@ -27,7 +23,10 @@ jobs:
             export BUILDPLATFORM=linux/amd64
             export TARGETPLATFORM=linux/amd64
             BUILDPLATFORM=linux/amd64 TARGETPLATFORM=linux/amd64 make build-events-image-dev
-          
+      - run:
+          name: build templates
+          command: make build-templates
+          working_directory: ./test/ci
   test:
     docker:
       - image: circleci/golang:1.16
