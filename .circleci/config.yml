@@ -2,18 +2,13 @@ version: 2.1
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.16
+      - image: jdrouet/docker-with-buildx:stable
     steps:      
       - setup_remote_docker:
           version: 20.10.24
           docker_layer_caching: true
       - checkout
       - run: docker version
-      - run: docker build --help   
-      - run: apk add make curl
-      - run: mkdir -vp ~/.docker/cli-plugins/
-      - run: curl --silent -L --output ~/.docker/cli-plugins/docker-buildx https://github.com/docker/buildx/releases/download/v0.3.1/buildx-v0.3.1.linux-amd64
-      - run: chmod a+x ~/.docker/cli-plugins/docker-buildx
       - run: docker buildx version
       - run:
           name: docker build
