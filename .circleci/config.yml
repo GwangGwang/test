@@ -1,42 +1,31 @@
 version: 2.1
-jobs:
-  build:
-    docker:
-      - image: circleci/golang:1.16
-    steps:      
-      - setup_remote_docker:
-          version: 20.10.24
-          docker_layer_caching: true
-      - checkout
-      - run: docker version
-      - run:
-          name: build templates
-          command: make build-templates
-          working_directory: ./test/ci
-  test:
-    docker:
-      - image: circleci/golang:1.16
-    steps:
-      - run:
-          name: file exists
-          command: cat /tmp/ci/test
-      - run:
-          name: echo path
-          command: echo $PATH
-                
-  
+
+# this allows you to use CircleCI's dynamic configuration feature
+setup: true
+
+# the path-filtering orb is required to continue a pipeline based on
+# the path of an updated fileset
+orbs:
+  path-filtering: circleci/path-filtering@0.1.1
+
 workflows:
-  test:
+  # the always-run workflow is always triggered, regardless of the pipeline parameters.
+  always-run:
     jobs:
-      - build:
-          context:
-            - shared
-      - hold-test:
-          type: approval
-          requires:
-            - build      
-      - test:
-          requires:
-            - hold-test
-          context:
-            - shared
+      # the path-filtering/filter job determines which pipeline
+      # parameters to update.
+      - path-filtering/filter:
+          name: check-updated-files
+          # 3-column, whitespace-delimited mapping. One mapping per
+          # line:
+          # <regex path-to-test> <parameter-to-set> <value-of-pipeline-parameter>
+          mapping: |
+            cmd/service1/.* run-service1-jobs true
+            cmd/service2/.* run-service2-jobs true
+            internal/.* run-all-build-deploy-jobs true
+          base-revision: main
+          # this is the path of the configuration we should trigger once
+          # path filtering and pipeline parameter value updates are
+          # complete. In this case, we are using the parent dynamic
+          # configuration itself.
+          config-path: .circleci/continue_config.yml
