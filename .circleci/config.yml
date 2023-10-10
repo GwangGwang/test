@@ -6,7 +6,7 @@ setup: true
 # the path-filtering orb is required to continue a pipeline based on
 # the path of an updated fileset
 orbs:
-  path-filtering: circleci/path-filtering@0.1.1
+  path-filtering: circleci/path-filtering@1.0.0
 
 
 workflows:
@@ -21,7 +21,7 @@ workflows:
           # line:
           # <regex path-to-test> <parameter-to-set> <value-of-pipeline-parameter>
           mapping: |
-            cmd/service1/.* run-build-service-1-job true
+            (cmd|services)/service1/.* run-build-service-1-job true
             cmd/service2/.* run-build-service-2-job true
             internal/.* run-all-build-deploy-jobs true
           base-revision: main
