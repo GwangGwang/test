@@ -20,8 +20,8 @@ workflows:
           # line:
           # <regex path-to-test> <parameter-to-set> <value-of-pipeline-parameter>
           mapping: |
-            cmd/service1/.* run-service1-jobs true
-            cmd/service2/.* run-service2-jobs true
+            cmd/service1/.* run-build-service-1-job true
+            cmd/service2/.* run-build-service-2-job true
             internal/.* run-all-build-deploy-jobs true
           base-revision: main
           # this is the path of the configuration we should trigger once
