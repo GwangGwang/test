@@ -24,6 +24,7 @@ workflows:
             (cmd|services)/service1/.* run-build-service-1-job true
             cmd/service2/.* run-build-service-2-job true
             internal/.* run-all-build-deploy-jobs true
+            
           base-revision: main
           # this is the path of the configuration we should trigger once
           # path filtering and pipeline parameter value updates are
