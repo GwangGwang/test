@@ -18,12 +18,12 @@ jobs:
     docker:
       - image: circleci/golang:1.16
     steps:
-      - echo "i am build service 1"
+      - run: echo "i am build service 1"
   build-service-2:
     docker:
       - image: circleci/golang:1.16
     steps:
-      - echo "i am build service 2"
+      - run: echo "i am build service 2"
 
 # here we specify our workflows, most of which are conditionally
 # executed based upon pipeline parameter values. Each workflow calls a
