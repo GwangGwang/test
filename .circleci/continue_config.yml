@@ -21,15 +21,15 @@ jobs:
       - when:
           condition:
             or:
-              - equal: [true, << pipeline.parameters.run-build-service-1-job >> ] 
-              - equal: [true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
+              - equal: [ true, << pipeline.parameters.run-build-service-1-job >> ] 
+              - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
           steps:
             - run: echo "I build service 1"
       - when:
           condition:
             or:
-              - equal: [true, << pipeline.parameters.run-build-service-2-job >> ] 
-              - equal: [true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
+              - equal: [ true, << pipeline.parameters.run-build-service-2-job >> ] 
+              - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
           steps:
             - run: echo "I build service 2"
 
