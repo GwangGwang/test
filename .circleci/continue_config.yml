@@ -14,16 +14,25 @@ parameters:
     default: false
 
 jobs:
-  build-service-1:
+  build:
     docker:
       - image: circleci/golang:1.16
     steps:
-      - run: echo "i am build service 1"
-  build-service-2:
-    docker:
-      - image: circleci/golang:1.16
-    steps:
-      - run: echo "i am build service 2"
+      - when:
+          condition:
+            or:
+              - equal: [true, << pipeline.parameters.run-build-service-1-job >> ] 
+              - equal: [true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
+          steps:
+            - run: echo "I build service 1"
+      - when:
+          condition:
+            or:
+              - equal: [true, << pipeline.parameters.run-build-service-2-job >> ] 
+              - equal: [true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
+          steps:
+            - run: echo "I build service 2"
+
 
 # here we specify our workflows, most of which are conditionally
 # executed based upon pipeline parameter values. Each workflow calls a
@@ -31,32 +40,8 @@ jobs:
 workflows:
   # when pipeline parameter, run-build-service-1-job is true, the
   # build-service-1 job is triggered.
-  service-1:
-    when:
-      and:
-        - equal: [true, << pipeline.parameters.run-build-service-1-job >> ]
-        - equal: [false, << pipeline.parameters.run-all-build-deploy-jobs >> ]
+  build-dev:
     jobs:
-      - build-service-2:
-          context:
-            - shared      
-  # when pipeline parameter, run-build-service-2-job is true, the
-  # build-service-2 job is triggered.
-  service-2:
-    when:
-      and:
-        - equal: [true, << pipeline.parameters.run-build-service-1-job >> ]
-        - equal: [false, << pipeline.parameters.run-all-build-deploy-jobs >> ]
-    jobs:
-      - build-service-1:
+      - build:
           context:
             - shared
-  all-services:
-    when: << pipeline.parameters.run-all-build-deploy-jobs >>
-    jobs:
-      - build-service-1:
-          context:
-            - shared
-      - build-service-2:
-          context:
-            - shared\
