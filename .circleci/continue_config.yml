@@ -18,6 +18,7 @@ jobs:
     docker:
       - image: circleci/golang:1.16
     steps:
+      - run: echo "i build?"
       - when:
           condition:
             or:
@@ -42,6 +43,4 @@ workflows:
   # build-service-1 job is triggered.
   build-dev:
     jobs:
-      - build:
-          context:
-            - shared
+      - build
