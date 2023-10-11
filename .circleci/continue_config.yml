@@ -29,6 +29,14 @@ jobs:
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
       - run: echo "cmd/<< parameters.service >>/config.<< parameters.environment >>.json"
+      - run: echo "templateID" >> /tmp/ci/templates
+      - persist_to_workspace:
+          root: /tmp/ci
+          paths:
+            - templates
+      - store_artifacts:
+          path: /tmp/ci/templates
+          destination: created-instance-templates
   deploy:
     docker:
       - image: circleci/golang:1.16
@@ -43,6 +51,12 @@ jobs:
       - run: echo "i deploy?"
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
+      - attach_workspace:
+          at: /tmp/ci
+      - run:
+          name: stuff
+          command: echo /tmp/ci/templates
+
 
 
 # here we specify our workflows, most of which are conditionally
