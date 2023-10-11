@@ -18,11 +18,29 @@ jobs:
     docker:
       - image: circleci/golang:1.16
     parameters:
+      environment:
+        type: string
+        default: dev  
       service:
         type: string
-        default: ""  
+        default: ""
     steps:
       - run: echo "i build?"
+      - run: echo << parameters.environment >>
+      - run: echo << parameters.service >>
+  deploy:
+    docker:
+      - image: circleci/golang:1.16
+    parameters:
+      environment:
+        type: string
+        default: dev  
+      service:
+        type: string
+        default: ""
+    steps:
+      - run: echo "i deploy?"
+      - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
 
 
@@ -40,7 +58,43 @@ workflows:
           - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
     jobs:
       - build:
+          name: build-dev-service1
+          # parameters
+          environment: dev
           service: service1
+      - hold-deploy-dev:
+          type: approval
+          requires: build-dev-service1
+      - deploy:
+          name: deploy-dev-service1
+          environment: dev
+          service: service1
+          requires: hold-deploy-dev
+      - build:
+          name: build-prod-service1
+          filters:
+            branches:
+              only:
+                - main
+          # parameters
+          environment: prod
+          service: service1
+      - hold-deploy-prod:
+          type: approval
+          requires: build-prod-service1
+      - deploy:
+          name: deploy-prod-service1
+          filters:
+            branches:
+              only:
+                - main
+          environment: prod
+          service: service1
+          requires: hold-deploy-prod
+          
+
+
+
   build-service2:
     when:
       condition:
