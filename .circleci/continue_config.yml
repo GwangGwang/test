@@ -65,7 +65,7 @@ workflows:
           name: build-dev-service1
       - hold-deploy-dev:
           type: approval
-          requires: build-dev-service1
+          requires: build
       - deploy:
           environment: dev
           service: service1
@@ -84,7 +84,7 @@ workflows:
           name: build-prod-service1
       - hold-deploy-prod:
           type: approval
-          requires: build-prod-service1
+          requires: build
       - deploy:
           environment: prod
           service: service1
