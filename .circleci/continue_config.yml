@@ -65,13 +65,16 @@ workflows:
           name: build-dev-service1
       - hold-deploy-dev:
           type: approval
-          requires: build
+
+          requires:
+            - build-dev-service1
       - deploy:
           environment: dev
           service: service1
 
           name: deploy-dev-service1
-          requires: hold-deploy-dev
+          requires:
+            - hold-deploy-dev
       - build:
           filters:
             branches:
@@ -84,12 +87,15 @@ workflows:
           name: build-prod-service1
       - hold-deploy-prod:
           type: approval
-          requires: build
+          requires:
+            - build-prod-service1
+
       - deploy:
           environment: prod
           service: service1
 
-          requires: hold-deploy-prod
+          requires:
+            - hold-deploy-prod
           name: deploy-prod-service1
 
 
