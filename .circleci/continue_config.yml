@@ -43,6 +43,7 @@ jobs:
       - store_artifacts:
           path: /tmp/ci/templates
           destination: created-instance-templates
+      - run: cat /tmp/ci/templates    
   deploy:
     docker:
       - image: circleci/golang:1.16
@@ -61,7 +62,7 @@ jobs:
           at: /tmp/ci
       - run:
           name: stuff
-          command: echo /tmp/ci/templates
+          command: cat /tmp/ci/templates
 
 
 
