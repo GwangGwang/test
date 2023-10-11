@@ -17,22 +17,31 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.16
+    parameters:
+      environment:
+        type: string
+        default: dev  
+      service:
+        type: string
+        default: ""
     steps:
       - run: echo "i build?"
-      - when:
-          condition:
-            or:
-              - equal: [ true, << pipeline.parameters.run-build-service-1-job >> ] 
-              - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
-          steps:
-            - run: echo "I build service 1"
-      - when:
-          condition:
-            or:
-              - equal: [ true, << pipeline.parameters.run-build-service-2-job >> ] 
-              - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
-          steps:
-            - run: echo "I build service 2"
+      - run: echo << parameters.environment >>
+      - run: echo << parameters.service >>
+  deploy:
+    docker:
+      - image: circleci/golang:1.16
+    parameters:
+      environment:
+        type: string
+        default: dev  
+      service:
+        type: string
+        default: ""
+    steps:
+      - run: echo "i deploy?"
+      - run: echo << parameters.environment >>
+      - run: echo << parameters.service >>
 
 
 # here we specify our workflows, most of which are conditionally
@@ -41,7 +50,100 @@ jobs:
 workflows:
   # when pipeline parameter, run-build-service-1-job is true, the
   # build-service-1 job is triggered.
-  build-dev:
+  build-service1:
+    when:
+      condition:
+        or:
+          - equal: [ true, << pipeline.parameters.run-build-service-1-job >> ] 
+          - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
     jobs:
-      - build
-      
+      - build:
+          # parameters
+          environment: dev
+          service: service1
+
+          name: build-dev-service1
+      - hold-deploy-dev:
+          type: approval
+
+          requires:
+            - build-dev-service1
+      - deploy:
+          environment: dev
+          service: service1
+
+          name: deploy-dev-service1
+          requires:
+            - hold-deploy-dev
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+          # parameters
+          environment: prod
+          service: service1
+
+          name: build-prod-service1
+      - hold-deploy-prod:
+          type: approval
+          requires:
+            - build-prod-service1
+
+      - deploy:
+          environment: prod
+          service: service1
+
+          requires:
+            - hold-deploy-prod
+          name: deploy-prod-service1
+
+  build-service2:
+    when:
+      condition:
+        or:
+          - equal: [ true, << pipeline.parameters.run-build-service-2-job >> ] 
+          - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
+    jobs:
+      - build:
+          # parameters
+          environment: dev
+          service: service2
+
+          name: build-dev-service2
+      - hold-deploy-dev:
+          type: approval
+
+          requires:
+            - build-dev-service2
+      - deploy:
+          environment: dev
+          service: service2
+
+          name: deploy-dev-service2
+          requires:
+            - hold-deploy-dev
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+          # parameters
+          environment: prod
+          service: service2
+
+          name: build-prod-service2
+      - hold-deploy-prod:
+          type: approval
+          requires:
+            - build-prod-service2
+
+      - deploy:
+          environment: prod
+          service: service2
+
+          requires:
+            - hold-deploy-prod
+          name: deploy-prod-service2
+
+
