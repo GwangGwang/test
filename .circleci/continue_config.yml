@@ -29,6 +29,12 @@ jobs:
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
       - run: echo "cmd/<< parameters.service >>/config.<< parameters.environment >>.json"
+      - run:
+          name: prepare dir
+          command: |
+            mkdir -p /tmp/ci
+            touch /tmp/ci/templates
+            chmod 755 /tmp/ci/templates
       - run: echo "templateID" >> /tmp/ci/templates
       - persist_to_workspace:
           root: /tmp/ci
