@@ -98,8 +98,6 @@ workflows:
             - hold-deploy-prod
           name: deploy-prod-service1
 
-
-
   build-service2:
     when:
       condition:
@@ -108,5 +106,44 @@ workflows:
           - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
     jobs:
       - build:
+          # parameters
+          environment: dev
           service: service2
-            
+
+          name: build-dev-service2
+      - hold-deploy-dev:
+          type: approval
+
+          requires:
+            - build-dev-service2
+      - deploy:
+          environment: dev
+          service: service2
+
+          name: deploy-dev-service2
+          requires:
+            - hold-deploy-dev
+      - build:
+          filters:
+            branches:
+              only:
+                - main
+          # parameters
+          environment: prod
+          service: service2
+
+          name: build-prod-service2
+      - hold-deploy-prod:
+          type: approval
+          requires:
+            - build-prod-service2
+
+      - deploy:
+          environment: prod
+          service: service2
+
+          requires:
+            - hold-deploy-prod
+          name: deploy-prod-service2
+
+
