@@ -17,22 +17,13 @@ jobs:
   build:
     docker:
       - image: circleci/golang:1.16
+    parameters:
+      service:
+        type: string
+        default: ""  
     steps:
       - run: echo "i build?"
-      - when:
-          condition:
-            or:
-              - equal: [ true, << pipeline.parameters.run-build-service-1-job >> ] 
-              - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
-          steps:
-            - run: echo "I build service 1"
-      - when:
-          condition:
-            or:
-              - equal: [ true, << pipeline.parameters.run-build-service-2-job >> ] 
-              - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
-          steps:
-            - run: echo "I build service 2"
+      - run: echo << parameters.service >>
 
 
 # here we specify our workflows, most of which are conditionally
@@ -41,7 +32,22 @@ jobs:
 workflows:
   # when pipeline parameter, run-build-service-1-job is true, the
   # build-service-1 job is triggered.
-  build-dev:
+  build-service1:
+    when:
+      condition:
+        or:
+          - equal: [ true, << pipeline.parameters.run-build-service-1-job >> ] 
+          - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
     jobs:
-      - build
-      
+      - build:
+          service: service1
+  build-service2:
+    when:
+      condition:
+        or:
+          - equal: [ true, << pipeline.parameters.run-build-service-2-job >> ] 
+          - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
+    jobs:
+      - build:
+          service: service2
+            
