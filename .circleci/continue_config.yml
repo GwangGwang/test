@@ -28,6 +28,7 @@ jobs:
       - run: echo "i build?"
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
+      - run: echo "cmd/<< parameters.service >>/config.<< parameters.environment >>.json"
   deploy:
     docker:
       - image: circleci/golang:1.16
