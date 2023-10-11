@@ -73,29 +73,24 @@ workflows:
           name: deploy-dev-service1
           requires: hold-deploy-dev
       - build:
-          # parameters
-          environment: prod
-          service: service1
-          
-          name: build-prod-service1
           filters:
             branches:
               only:
                 - main
+          # parameters
+          environment: prod
+          service: service1
+
+          name: build-prod-service1
       - hold-deploy-prod:
           type: approval
           requires: build-prod-service1
       - deploy:
-          service: service1
-          requires: hold-deploy-prod
-
-          name: deploy-prod-service1
-          filters:
-            branches:
-              only:
-                - main
           environment: prod
-          
+          service: service1
+
+          requires: hold-deploy-prod
+          name: deploy-prod-service1
 
 
 
