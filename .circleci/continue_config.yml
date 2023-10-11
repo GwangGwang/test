@@ -58,39 +58,43 @@ workflows:
           - equal: [ true, << pipeline.parameters.run-all-build-deploy-jobs >> ]
     jobs:
       - build:
-          name: build-dev-service1
           # parameters
           environment: dev
           service: service1
+
+          name: build-dev-service1
       - hold-deploy-dev:
           type: approval
           requires: build-dev-service1
       - deploy:
-          name: deploy-dev-service1
           environment: dev
           service: service1
+
+          name: deploy-dev-service1
           requires: hold-deploy-dev
       - build:
+          # parameters
+          environment: prod
+          service: service1
+          
           name: build-prod-service1
           filters:
             branches:
               only:
                 - main
-          # parameters
-          environment: prod
-          service: service1
       - hold-deploy-prod:
           type: approval
           requires: build-prod-service1
       - deploy:
+          service: service1
+          requires: hold-deploy-prod
+
           name: deploy-prod-service1
           filters:
             branches:
               only:
                 - main
           environment: prod
-          service: service1
-          requires: hold-deploy-prod
           
 
 
