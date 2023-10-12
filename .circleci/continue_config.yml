@@ -14,6 +14,11 @@ parameters:
     default: false
 
 jobs:
+  test:
+    docker:
+      - image: circleci/golang:1.16
+    steps:
+      - run: echo "does param carry over? << pipeline.parameters.test-param >>"  
   build:
     docker:
       - image: circleci/golang:1.16
@@ -70,6 +75,10 @@ jobs:
 # executed based upon pipeline parameter values. Each workflow calls a
 # specific job defined above, in the jobs section.
 workflows:
+  always-run:
+    jobs:
+      - test
+
   # when pipeline parameter, run-build-service-1-job is true, the
   # build-service-1 job is triggered.
   build-service1:
