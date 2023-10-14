@@ -11,7 +11,7 @@ parameters:
     default: false
   run-all-build-deploy-jobs:
     type: boolean
-    default: false
+    default: true
 
 jobs:
   build:
@@ -74,7 +74,10 @@ workflows:
   # when pipeline parameter, run-build-service-1-job is true, the
   # build-service-1 job is triggered.
   build-service1:
-    when: << pipeline.parameters.run-build-service-1-job >> 
+    when:
+      or:
+        - << pipeline.parameters.run-build-service-1-job >>
+        - << pipeline.parameters.run-all-build-deploy-jobs >>
     jobs:
       - build:
           # parameters
@@ -116,7 +119,10 @@ workflows:
           requires:
             - hold-deploy-prod
           name: deploy-prod-service1
-    when: << pipeline.parameters.run-build-service-2-job >> 
+    when:
+      or:
+        - << pipeline.parameters.run-build-service-2-job >>
+        - << pipeline.parameters.run-all-build-deploy-jobs >>
     jobs:
       - build:
           # parameters
