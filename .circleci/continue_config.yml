@@ -134,12 +134,12 @@ workflows:
           type: approval
 
           requires:
-            - build-dev-service1
+            - build-dev-service2
       - deploy:
           environment: dev
           service: service1
 
-          name: deploy-dev-service1
+          name: deploy-dev-service2
           requires:
             - hold-deploy-dev
       - build:
@@ -149,21 +149,21 @@ workflows:
                 - main
           # parameters
           environment: prod
-          service: service1
+          service: service2
 
-          name: build-prod-service1
+          name: build-prod-service2
       - hold-deploy-prod:
           type: approval
           requires:
-            - build-prod-service1
+            - build-prod-service2
 
       - deploy:
           environment: prod
-          service: service1
+          service: service2
 
           requires:
             - hold-deploy-prod
-          name: deploy-prod-service1
+          name: deploy-prod-service2
   build-service2:
     when:
       condition:
