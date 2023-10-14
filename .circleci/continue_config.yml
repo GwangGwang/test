@@ -14,11 +14,6 @@ parameters:
     default: false
 
 jobs:
-  test:
-    docker:
-      - image: circleci/golang:1.16
-    steps:
-      - run: echo "does param carry over? << pipeline.parameters.test-param >>"  
   build:
     docker:
       - image: circleci/golang:1.16
