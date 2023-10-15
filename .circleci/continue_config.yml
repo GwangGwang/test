@@ -32,6 +32,9 @@ orbs:
           service:
             type: string
             default: ""
+          build-image:
+            type: string
+            default: ""  
         steps:
           - run: echo "I START BUILD"
           - when:
