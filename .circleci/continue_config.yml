@@ -30,16 +30,7 @@ jobs:
       - run: echo "i start build"
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
-      - run: echo $PROJ_ID
-      - when:
-          condition:
-            equal: [ prod, << parameters.environment >> ]
-          steps:
-            - run:
-                name: update stack
-                command: |
-                  echo 'export PROJ_ID=prod' >> "$BASH_ENV"
-                  source "$BASH_ENV"  
+      - run: echo $PROJ_ID 
       - run: echo $PROJ_ID
       - run: echo "cmd/<< parameters.service >>/config.<< parameters.environment >>.json"
       - run:
