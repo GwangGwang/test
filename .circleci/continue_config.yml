@@ -27,15 +27,6 @@ jobs:
     steps:
       - run: echo "i start build"
       - run: echo $STACK
-      - when:
-          condition:
-            equal: [ prod, << parameters.environment >> ]
-          steps:
-            - run:
-                name: update stack
-                command: |
-                  echo 'export STACK=prod' >> "$BASH_ENV"
-                  source "$BASH_ENV"
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
       - run: echo $STACK
