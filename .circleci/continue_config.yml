@@ -16,9 +16,7 @@ parameters:
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.16
-    environment:
-      STACK: original-dev  
+      - image: circleci/golang:1.16 
     parameters:
       environment:
         type: string
@@ -28,6 +26,7 @@ jobs:
         default: ""
     steps:
       - run: echo "i start build"
+      - run: echo $STACK
       - when:
           condition:
             equal: [ prod, << parameters.environment >> ]
