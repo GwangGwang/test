@@ -18,7 +18,7 @@ jobs:
     docker:
       - image: circleci/golang:1.16
     environment:
-      PROJ_ID: original-stack  
+      PROJ_ID: original-stack
     parameters:
       environment:
         type: string
@@ -28,6 +28,9 @@ jobs:
         default: ""
     steps:
       - run: echo "i start build"
+      - run: echo << parameters.environment >>
+      - run: echo << parameters.service >>
+      - run: echo $PROJ_ID
       - when:
           condition:
             equal: [ prod, << parameters.environment >> ]
@@ -37,8 +40,6 @@ jobs:
                 command: |
                   echo 'export PROJ_ID=prod' >> "$BASH_ENV"
                   source "$BASH_ENV"  
-      - run: echo << parameters.environment >>
-      - run: echo << parameters.service >>
       - run: echo $PROJ_ID
       - run: echo "cmd/<< parameters.service >>/config.<< parameters.environment >>.json"
       - run:
