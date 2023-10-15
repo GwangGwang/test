@@ -18,7 +18,7 @@ jobs:
     docker:
       - image: circleci/golang:1.16
     environment:
-      STACK: original-stack  
+      PROJ_ID: original-stack  
     parameters:
       environment:
         type: string
@@ -35,11 +35,11 @@ jobs:
             - run:
                 name: update stack
                 command: |
-                  echo 'export STACK=prod' >> "$BASH_ENV"
+                  echo 'export PROJ_ID=prod' >> "$BASH_ENV"
                   source "$BASH_ENV"  
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
-      - run: echo $STACK
+      - run: echo $PROJ_ID
       - run: echo "cmd/<< parameters.service >>/config.<< parameters.environment >>.json"
       - run:
           name: prepare dir
