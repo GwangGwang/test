@@ -16,7 +16,9 @@ parameters:
 jobs:
   build:
     docker:
-      - image: circleci/golang:1.16 
+      - image: circleci/golang:1.16
+    environment:
+      STACK: original-dev  
     parameters:
       environment:
         type: string
@@ -26,7 +28,15 @@ jobs:
         default: ""
     steps:
       - run: echo "i start build"
-      - run: echo $STACK
+      - when:
+          condition:
+            equal: [ prod, << parameters.environment >> ]
+          steps:
+            - run:
+                name: update stack
+                command: |
+                  echo 'export STACK=prod' >> "$BASH_ENV"
+                  source "$BASH_ENV"
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
       - run: echo $STACK
@@ -76,8 +86,6 @@ workflows:
   # when pipeline parameter, run-build-service-1-job is true, the
   # build-service-1 job is triggered.
   build-service1:
-    environment:
-      TEST_ENV="before_changed"
     when:
       or:
         - << pipeline.parameters.run-build-service-1-job >>
