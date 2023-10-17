@@ -5,9 +5,12 @@ jobs:
       - image: cimg/go:1.21.3
     steps:
       - checkout
+      - setup_remote_docker:
+          version: "20.10.14"
       - run:
           name: Install Dagger CLI
           command: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sudo sh; cd -; }
+      - run: ls -l /tmp    
       - run:
           name: Install Dependencies
           command: dagger run --progress plain go run ci/main.go --actions install
