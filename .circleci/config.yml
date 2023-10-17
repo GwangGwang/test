@@ -10,7 +10,7 @@ jobs:
       - run:
           name: Install Dagger CLI
           command: cd /usr/local && { curl -L https://dl.dagger.io/dagger/install.sh | sudo sh; cd -; }
-      - run: ls -l /tmp    
+      - run: docker buildx version 
       - run:
           name: Install Dependencies
           command: dagger run --progress plain go run ci/main.go --actions install
