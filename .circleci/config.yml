@@ -4,7 +4,7 @@ jobs:
     docker:
       - image: cimg/go:1.21.3
     steps:
-      - echo $CIRCLE_USERNAME
+      - run: echo $CIRCLE_USERNAME
       - checkout
       - setup_remote_docker:
           version: "20.10.14"
