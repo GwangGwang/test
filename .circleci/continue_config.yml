@@ -91,10 +91,10 @@ jobs:
     steps:
       - checkout
       - run: echo "i deploy?"
+      - run: echo $CIRCLE_TAG   
       - cmd-test:
           os: darwin
-          arch: arm64
-      - run: echo $CIRCLE_TAG    
+          arch: arm64 
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
       - attach_workspace:
