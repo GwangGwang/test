@@ -24,7 +24,6 @@ commands:
         type: string
       arch:
         type: string
-    working_directory: ./cmd/service1
     steps:
       - run: pwd
       - run: echo <<parameters.os>>
@@ -58,6 +57,7 @@ orbs:
           - cmd-test:
               os: darwin
               arch: arm64
+              working_directory: ./cmd/service1
           - when:
               condition:
                 equal: [ prod, << parameters.environment >> ]
