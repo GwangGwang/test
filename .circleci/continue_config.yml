@@ -94,6 +94,7 @@ jobs:
       - cmd-test:
           os: darwin
           arch: arm64
+      - run: echo $CIRCLE_TAG    
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
       - attach_workspace:
