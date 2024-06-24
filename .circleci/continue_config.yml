@@ -134,8 +134,9 @@ workflows:
           service: service1
 
           name: deploy-dev-service1
-#          requires:
-#            - hold-deploy-dev
+          filters:
+            tags:
+              only: /^v.*/
       - ci/build:
           filters:
             branches:
