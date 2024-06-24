@@ -93,6 +93,7 @@ jobs:
       - checkout
       - run: echo "i deploy?"
       - run: echo ${CIRCLE_TAG}   
+      - run: echo "<< pipeline.git.tag >>"
       - cmd-test:
           os: darwin
           arch: arm64 
