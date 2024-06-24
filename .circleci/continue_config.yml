@@ -17,6 +17,24 @@ parameters:
     default: true
 
 
+commands:
+  cmd-test:
+    parameters:
+      os:
+        type: string
+      arch:
+        type: string
+    working_directory: ./cmd/service1
+    steps:
+      - run: pwd
+      - run: echo <<parameters.os>>
+      - run: echo <<parameters.arch>>
+      - run: GOOS=<< parameters.os >> GOARCH=<< parameters.arch >> go build \
+          -gcflags='-e' \
+          -ldflags "-X main.Version=test2 -X main.PublicKey=${BTCTL_SELFUPDATE_PUBLIC_KEY}" \
+          -o ../test-<< parameters.os >>-<< parameters.arch >>
+      - run: ls -l ./../
+
 orbs:
   ci:
     jobs:
@@ -37,6 +55,9 @@ orbs:
             default: ""  
         steps:
           - run: echo "I START BUILD"
+          - cmd-test:
+              os: darwin
+              arch: arm64
           - when:
               condition:
                 equal: [ prod, << parameters.environment >> ]
