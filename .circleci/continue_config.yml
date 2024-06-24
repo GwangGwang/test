@@ -92,7 +92,7 @@ jobs:
     steps:
       - checkout
       - run: echo "i deploy?"
-      - run: echo $CIRCLE_TAG   
+      - run: echo ${CIRCLE_TAG}   
       - cmd-test:
           os: darwin
           arch: arm64 
