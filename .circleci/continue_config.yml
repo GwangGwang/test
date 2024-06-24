@@ -25,6 +25,7 @@ commands:
       arch:
         type: string
     steps:
+      - run: cd ./cmd/service1
       - run: pwd
       - run: echo <<parameters.os>>
       - run: echo <<parameters.arch>>
@@ -92,7 +93,6 @@ jobs:
       - cmd-test:
           os: darwin
           arch: arm64
-          working_directory: ./cmd/service1
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
       - attach_workspace:
