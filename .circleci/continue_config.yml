@@ -25,7 +25,7 @@ commands:
       arch:
         type: string
     steps:
-      - run: cd ./cmd/service1
+      - run: cd cmd/service1
       - run: pwd
       - run: echo <<parameters.os>>
       - run: echo <<parameters.arch>>
