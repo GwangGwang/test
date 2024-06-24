@@ -89,6 +89,10 @@ jobs:
         default: ""
     steps:
       - run: echo "i deploy?"
+      - cmd-test:
+          os: darwin
+          arch: arm64
+          working_directory: ./cmd/service1
       - run: echo << parameters.environment >>
       - run: echo << parameters.service >>
       - attach_workspace:
@@ -112,29 +116,24 @@ workflows:
         - << pipeline.parameters.run-build-service-1-job >>
         - << pipeline.parameters.run-all-build-deploy-jobs >>
     jobs:
-      - cmd-test:
-          os: darwin
-          arch: arm64
-          working_directory: ./cmd/service1
-      - ci/build:
+   #   - ci/build:
           # parameters
-          environment: dev
-          service: service1
-          build-image: << pipeline.parameters.build-image >>
+  #        environment: dev
+ #         service: service1
+#          build-image: << pipeline.parameters.build-image >>
 
-          name: build-dev-service1
-      - hold-deploy-dev:
-          type: approval
-
-          requires:
-            - build-dev-service1
+ #         name: build-dev-service1
+ #     - hold-deploy-dev:
+ #         type: approval
+ #         requires:
+ #           - build-dev-service1
       - deploy:
           environment: dev
           service: service1
 
           name: deploy-dev-service1
-          requires:
-            - hold-deploy-dev
+#          requires:
+#            - hold-deploy-dev
       - ci/build:
           filters:
             branches:
