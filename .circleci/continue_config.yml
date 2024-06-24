@@ -139,6 +139,7 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+              
       - ci/build:
           filters:
             branches:
