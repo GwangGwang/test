@@ -89,6 +89,7 @@ jobs:
         type: string
         default: ""
     steps:
+      - checkout
       - run: echo "i deploy?"
       - cmd-test:
           os: darwin
