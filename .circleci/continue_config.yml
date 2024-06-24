@@ -54,10 +54,6 @@ orbs:
             default: ""  
         steps:
           - run: echo "I START BUILD"
-          - cmd-test:
-              os: darwin
-              arch: arm64
-              working_directory: ./cmd/service1
           - when:
               condition:
                 equal: [ prod, << parameters.environment >> ]
@@ -116,6 +112,10 @@ workflows:
         - << pipeline.parameters.run-build-service-1-job >>
         - << pipeline.parameters.run-all-build-deploy-jobs >>
     jobs:
+      - cmd-test:
+          os: darwin
+          arch: arm64
+          working_directory: ./cmd/service1
       - ci/build:
           # parameters
           environment: dev
