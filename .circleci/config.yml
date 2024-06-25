@@ -32,7 +32,7 @@ jobs:
             echo "export BTCTL_VERSION=btctl-v$MAJOR.$MINOR_NEW.$PATCH" >> $BASH_ENV
             source $BASH_ENV
             echo "New version to use: $BTCTL_VERSION"
-     - run: echo $BTCTL_VERSION       
+      - run: echo $BTCTL_VERSION       
 
 # Orchestrate our job run sequence
 workflows:
