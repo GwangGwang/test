@@ -23,7 +23,6 @@ jobs:
             # Extract the version part and split to major/minor/patch
             VERSION_PART=$(echo "$CURRENT_VERSION" | sed "s/^btctl-v\([0-9]*\.[0-9]*\.[0-9]*\)$/\1/")
             echo $VERSION_PART
-            #IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION_PART"
             
             # Increment the minor version
             MINOR_NEW=$((MINOR + 1))
