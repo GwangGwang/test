@@ -1,38 +1,41 @@
 version: 2.1
 
-parameters:
-  test-param:
-    type: string
-    default: "default"
-
-# this allows you to use CircleCI's dynamic configuration feature
-setup: true
-
-# the path-filtering orb is required to continue a pipeline based on
-# the path of an updated fileset
-orbs:
-  path-filtering: circleci/path-filtering@1.0.0
-
-
-workflows:
-  # the always-run workflow is always triggered, regardless of the pipeline parameters.
-  update-pipeline-parameters:
-    jobs:
-      # the path-filtering/filter job determines which pipeline
-      # parameters to update.
-      - path-filtering/filter:
-          name: check-updated-files
-          # 3-column, whitespace-delimited mapping. One mapping per
-          # line:
-          # <regex path-to-test> <parameter-to-set> <value-of-pipeline-parameter>
-          mapping: |
-            (cmd|services)/service1/.* run-build-service-1-job true
-            cmd/service2/.* run-build-service-2-job true
-            internal/.* run-all-build-deploy-jobs true
+# Define the jobs we want to run for this project
+jobs:
+  build:
+    docker:
+      - image: cimg/base:2023.03
+    steps:
+      - checkout
+      - run: echo "this is the build job"
+  test:
+    docker:
+      - image: cimg/base:2023.03
+    steps:
+      - checkout
+      - run:
+          name: echo "this is the test job"
+          command: |
+            # Current version via self-updating btctl grabbing the latest version
+            CURRENT_VERSION=btctl-v1.0.0
+            echo "Current btctl release version: $CURRENT_VERSION"
             
-          base-revision: main
-          # this is the path of the configuration we should trigger once
-          # path filtering and pipeline parameter value updates are
-          # complete. In this case, we are using the parent dynamic
-          # configuration itself.
-          config-path: .circleci/continue_config.yml
+            # Extract the version part and split to major/minor/patch
+            VERSION_PART=$(echo "$CURRENT_VERSION" | sed "s/^btctl-v\([0-9]*\.[0-9]*\.[0-9]*\)$/\1/")
+            echo $VERSION_PART
+            #IFS='.' read -r MAJOR MINOR PATCH <<< "$VERSION_PART"
+            
+            # Increment the minor version
+            MINOR_NEW=$((MINOR + 1))
+            
+            # Save the new version
+            #echo "export BTCTL_VERSION=btctl-v$MAJOR.$MINOR_NEW.$PATCH" >> $BASH_ENV
+            #source $BASH_ENV
+            #echo "New version to use: $BTCTL_VERSION"
+
+# Orchestrate our job run sequence
+workflows:
+  build_and_test:
+    jobs:
+      - build
+      - test
