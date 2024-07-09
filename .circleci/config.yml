@@ -57,7 +57,7 @@ workflows:
   build:
     jobs:
       - detect-changes
-      - build-service:
+      - build:
           matrix:
             parameters:
               service: ["service1", "service2"]
