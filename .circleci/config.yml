@@ -2,12 +2,29 @@ version: 2.1
 
 # Define the jobs we want to run for this project
 jobs:
-  build:
+  detect-changes:
     docker:
       - image: cimg/base:2023.03
     steps:
       - checkout
-      - run: echo "this is the build job"
+      - run:
+          name: Detect Changed Services
+          command: |
+            CHANGED_SERVICES="service1,service2"
+            echo "export CHANGED_SERVICES=$CHANGED_SERVICES" >> $BASH_ENV
+    
+  build:
+    docker:
+      - image: cimg/base:2023.03
+    parameters:
+      service:
+        type: string
+    steps:
+      - checkout      
+      - run:
+          name: Build << parameters.service >>
+          command: echo "building service << parameters.service >>"
+
   test:
     docker:
       - image: cimg/base:2023.03
@@ -37,7 +54,15 @@ jobs:
 
 # Orchestrate our job run sequence
 workflows:
-  build_and_test:
+  build:
     jobs:
-      - build
-      - test
+      - detect-changes
+      - build-service:
+          matrix:
+            parameters:
+              service: ["service1", "service2"]
+          requires:
+            - detect-changes
+          when:
+            condition: |
+              [[ ",$CHANGED_SERVICES," == *",<< matrix.service >>,"* ]]
