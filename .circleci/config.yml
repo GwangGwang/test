@@ -1,68 +1,21 @@
 version: 2.1
 
-# Define the jobs we want to run for this project
+orbs:
+  continuation: circleci/continuation@0.5.0
+
 jobs:
-  detect-changes:
+  update-pipeline-parameters:
     docker:
       - image: cimg/base:2023.03
     steps:
-      - checkout
       - run:
-          name: Detect Changed Services
-          command: |
-            CHANGED_SERVICES="service1,service2"
-            echo "export CHANGED_SERVICES=$CHANGED_SERVICES" >> $BASH_ENV
-    
-  build:
-    docker:
-      - image: cimg/base:2023.03
-    parameters:
-      service:
-        type: string
-    steps:
-      - checkout      
-      - run:
-          name: Build << parameters.service >>
-          command: echo "building service << parameters.service >>"
+          name: Set pipeline parameters
+          command: echo '{"run-tests": false}' > pipeline-parameters.json
+      - continuation/continue:
+          parameters_file: pipeline-parameters.json
+          configuration_path: .circleci/continue_config.yml  
 
-  test:
-    docker:
-      - image: cimg/base:2023.03
-    steps:
-      - checkout
-      - run:
-          name: echo "this is the test job"
-          command: |
-            # Current version via self-updating btctl grabbing the latest version
-            LATEST_VERSION=v1.0.4
-            VERSION_REGEX="^v([0-9]+)\.([0-9]+)\.([0-9]+)$"
-            if [[ $LATEST_VERSION =~ $VERSION_REGEX ]]; then
-              MAJOR="${BASH_REMATCH[1]}"
-              MINOR="${BASH_REMATCH[2]}"
-              PATCH="${BASH_REMATCH[3]}"
-              NEW_VERSION="v${MAJOR}.$((MINOR+1)).0"
-              echo "New version: $NEW_VERSION"
-              echo $NEW_VERSION > new_version.txt
-            else
-              echo "Error: Unable to parse the latest version"
-              exit 1
-            fi
-      - persist_to_workspace:
-          root: .
-          paths:
-            - new_version.txt    
-
-# Orchestrate our job run sequence
 workflows:
-  build:
+  setup:
     jobs:
-      - detect-changes
-      - build:
-          matrix:
-            parameters:
-              service: ["service1", "service2"]
-          requires:
-            - detect-changes
-          when:
-            condition: |
-              [[ ",$CHANGED_SERVICES," == *",<< matrix.service >>,"* ]]
+      - update-pipeline-parameters

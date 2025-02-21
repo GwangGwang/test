@@ -1,164 +1,47 @@
 version: 2.1
 
-# the default pipeline parameters, which will be updated according to
-# the results of the path-filtering orb
-parameters:  
-  build-image:
-    type: string
-    default: circleci/golang:1.16
-  run-build-service-1-job:
+parameters:
+  run-tests:
     type: boolean
     default: false
-  run-build-service-2-job:
-    type: boolean
-    default: false
-  run-all-build-deploy-jobs:
-    type: boolean
-    default: true
-
-
-commands:
-  cmd-test:
-    parameters:
-      os:
-        type: string
-      arch:
-        type: string
-    steps:
-      - run: cd cmd/service1
-      - run: pwd
-      - run: echo <<parameters.os>>
-      - run: echo <<parameters.arch>>
-      - run: GOOS=<< parameters.os >> GOARCH=<< parameters.arch >> go build \
-          -gcflags='-e' \
-          -ldflags "-X main.Version=test2 -X main.PublicKey=${BTCTL_SELFUPDATE_PUBLIC_KEY}" \
-          -o ../test-<< parameters.os >>-<< parameters.arch >>
-      - run: ls -l ./../
-
-orbs:
-  ci:
-    jobs:
-      build:
-        docker:
-          - image: << parameters.build-image >>
-        environment:
-          STACK: orig-dev
-        parameters:
-          environment:
-            type: string
-            default: dev
-          service:
-            type: string
-            default: ""
-          build-image:
-            type: string
-            default: ""  
-        steps:
-          - run: echo "I START BUILD"
-          - when:
-              condition:
-                equal: [ prod, << parameters.environment >> ]
-              steps:
-                - run:
-                    name: update stack
-                    command: |
-                      echo 'export STACK=prod' >> "$BASH_ENV"
-                      source "$BASH_ENV"
-          - run: echo << parameters.environment >>
-          - run: echo << parameters.service >>
-          - run: echo $STACK
-          - run: echo "cmd/<< parameters.service >>/config.<< parameters.environment >>.json"
-          - run:
-              name: prepare dir
-              command: |
-                mkdir -p /tmp/ci
-                touch /tmp/ci/templates
-                chmod 755 /tmp/ci/templates
-          - run: echo "templateID" >> /tmp/ci/templates                     
-
-
 
 jobs:
-  deploy:
+  non-test:
     docker:
-      - image: circleci/golang:1.16
-    parameters:
-      environment:
-        type: string
-        default: dev  
-      service:
-        type: string
-        default: ""
+      - image: cimg/base:2023.03
     steps:
-      - checkout
-      - run: echo "i deploy?"
-      - run: echo ${CIRCLE_TAG}   
-      - run: echo "<< pipeline.git.tag >>"
-      - cmd-test:
-          os: darwin
-          arch: arm64 
-      - run: echo << parameters.environment >>
-      - run: echo << parameters.service >>
-      - attach_workspace:
-          at: /tmp/ci
       - run:
-          name: stuff
-          command: cat /tmp/ci/templates
+          name: Non-test Job
+          command: echo "I am NOT testing!"
+  test:
+    docker:
+      - image: cimg/base:2023.03
+    steps:
+      - run:
+          name: Test Job
+          command: echo "I am testing!"
+  all-ok:
+    docker:
+      - image: cimg/base:2023.03
+    steps:
+      - run:
+          name: Final Confirmation
+          command: echo "All good to merge!"
 
-
-
-# here we specify our workflows, most of which are conditionally
-# executed based upon pipeline parameter values. Each workflow calls a
-# specific job defined above, in the jobs section.
 workflows:
-
-  # when pipeline parameter, run-build-service-1-job is true, the
-  # build-service-1 job is triggered.
-  build-service1:
-    when:
-      or:
-        - << pipeline.parameters.run-build-service-1-job >>
-        - << pipeline.parameters.run-all-build-deploy-jobs >>
+  workflow-with-test:
+    when: << pipeline.parameters.run-tests >>
     jobs:
-   #   - ci/build:
-          # parameters
-  #        environment: dev
- #         service: service1
-#          build-image: << pipeline.parameters.build-image >>
-
- #         name: build-dev-service1
- #     - hold-deploy-dev:
- #         type: approval
- #         requires:
- #           - build-dev-service1
-      - deploy:
-          environment: dev
-          service: service1
-
-          name: deploy-dev-service1
-          filters:
-            tags:
-              only: /^v.*/
-              
-      - ci/build:
-          filters:
-            branches:
-              only:
-                - main
-          # parameters
-          environment: prod
-          service: service1
-
-          name: build-prod-service1
-      - hold-deploy-prod:
-          type: approval
+      - non-test
+      - test
+      - all-ok:
           requires:
-            - build-prod-service1
-
-      - deploy:
-          environment: prod
-          service: service1
-
+            - non-test
+            - test
+  workflow-without-test:
+    when: << pipeline.parameters.run-tests >> == false
+    jobs:
+      - non-test
+      - all-ok:
           requires:
-            - hold-deploy-prod
-          name: deploy-prod-service1
+            - non-test
