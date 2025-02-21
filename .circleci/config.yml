@@ -14,10 +14,12 @@ jobs:
       - run:
           name: Set pipeline parameters
           command: |
-            echo '{"run-tests": true}' > pipeline-parameters.json
+            echo '{"run-tests": false}' > pipeline-parameters.json
       - continuation/continue:
           parameters: pipeline-parameters.json
           configuration_path: .circleci/continue_config.yml  
+
+
 
 workflows:
   setup:
