@@ -30,7 +30,7 @@ jobs:
 
 workflows:
   workflow-with-test:
-    when: << pipeline.parameters.run-tests >>
+    when: << pipeline.parameters.run-tests >> == true
     jobs:
       - non-test
       - test
